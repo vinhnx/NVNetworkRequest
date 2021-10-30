@@ -6,7 +6,7 @@ public enum Environment {
     case staging
     case production
 
-    var baseURL: String {
+    public var baseURL: String {
         switch self {
         case .developement: return ""
         case .staging: return ""
@@ -21,13 +21,13 @@ public enum APIPath: String {
 }
 
 extension APIPath {
-    var endpoint: Endpoint {
+    public var endpoint: Endpoint {
         Endpoint(path: self)
     }
 }
 
 public struct Endpoint {
-    let path: APIPath
+    public let path: APIPath
     static public private(set) var environment: Environment?
 
     var url: URL {
@@ -45,19 +45,19 @@ public struct Endpoint {
         return url
     }
 
-    static func configureEnvironment(_ environment: Environment) {
+    public static func configureEnvironment(_ environment: Environment) {
         self.environment = environment
     }
 }
 
-public class NVNetworkRequest {
+open class NVNetworkRequest {
 
     // MARK: - Properties
 
     public private(set) var dataRequest: DataRequest?
-    var cachePolicy: NSURLRequest.CachePolicy = .useProtocolCachePolicy
-    var timeoutInterval: TimeInterval = 15.0
-    var printCurl: Bool {
+    public var cachePolicy: NSURLRequest.CachePolicy = .useProtocolCachePolicy
+    public var timeoutInterval: TimeInterval = 15.0
+    public var printCurl: Bool {
 #if DEBUG
         return true
 #else
@@ -65,16 +65,16 @@ public class NVNetworkRequest {
 #endif
     }
 
-    var defaultHeaders = HTTPHeaders()
+    public var defaultHeaders = HTTPHeaders()
 
     // MARK: - Cancel
 
-    func cancel() {
+    public func cancel() {
         dataRequest?.cancel()
         dataRequest = nil
     }
 
-    func cancelAll(
+    public func cancelAll(
         completingOnQueue queue: DispatchQueue = .main,
         completion: (() -> Void)? = nil
     ) {
@@ -83,7 +83,7 @@ public class NVNetworkRequest {
 
     // MARK: - Request
 
-    func sendRequest<T: Decodable>(
+    public func sendRequest<T: Decodable>(
         endpoint: Endpoint,
         model: T.Type,
         method: HTTPMethod,
