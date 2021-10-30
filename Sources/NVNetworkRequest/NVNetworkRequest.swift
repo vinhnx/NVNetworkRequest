@@ -1,19 +1,8 @@
 import Foundation
 import Alamofire
 
-public enum Environment {
-    case developement
-    case staging
-    case production
-
-    public var baseURL: String {
-        switch self {
-        case .developement: return ""
-        case .staging: return ""
-        case .production: return ""
-        }
-    }
-
+public protocol EndpointEnvironment {
+    var baseURL: String { get }
 }
 
 public protocol EndpointPath {
@@ -28,7 +17,7 @@ public extension EndpointPath {
 
 public struct Endpoint {
     public let path: EndpointPath
-    static public private(set) var environment: Environment?
+    static public private(set) var environment: EndpointEnvironment?
 
     var url: URL {
         var components = URLComponents()
@@ -45,7 +34,7 @@ public struct Endpoint {
         return url
     }
 
-    public static func configureEnvironment(_ environment: Environment) {
+    public static func configureEnvironment(_ environment: EndpointEnvironment) {
         self.environment = environment
     }
 }
