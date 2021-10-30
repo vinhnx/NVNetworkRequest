@@ -26,16 +26,6 @@ extension EndpointPath {
     }
 }
 
-enum APIPath: EndpointPath {
-    case random
-
-    var path: String {
-        switch self {
-        case .random: return "random"
-        }
-    }
-}
-
 public struct Endpoint {
     public let path: EndpointPath
     static public private(set) var environment: Environment?
