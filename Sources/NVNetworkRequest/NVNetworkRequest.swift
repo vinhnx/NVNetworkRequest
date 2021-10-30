@@ -16,25 +16,35 @@ public enum Environment {
 
 }
 
-public enum APIPath: String {
-    case unknown
+public protocol EndpointPath {
+    var path: String { get }
 }
 
-extension APIPath {
-    public var endpoint: Endpoint {
+extension EndpointPath {
+    var endpoint: Endpoint {
         Endpoint(path: self)
     }
 }
 
+enum APIPath: EndpointPath {
+    case random
+
+    var path: String {
+        switch self {
+        case .random: return "random"
+        }
+    }
+}
+
 public struct Endpoint {
-    public let path: APIPath
+    public let path: EndpointPath
     static public private(set) var environment: Environment?
 
     var url: URL {
         var components = URLComponents()
         components.scheme = "https"
         components.host = Self.environment?.baseURL
-        components.path = "/" + path.rawValue
+        components.path = "/" + path.path
 
         guard let url = components.url else {
             preconditionFailure(
@@ -66,6 +76,8 @@ open class NVNetworkRequest {
     }
 
     public var defaultHeaders = HTTPHeaders()
+
+    public init() {}
 
     // MARK: - Cancel
 
