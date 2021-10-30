@@ -20,7 +20,7 @@ public protocol EndpointPath {
     var path: String { get }
 }
 
-extension EndpointPath {
+public extension EndpointPath {
     var endpoint: Endpoint {
         Endpoint(path: self)
     }
